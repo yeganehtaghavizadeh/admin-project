@@ -23,6 +23,54 @@ function App() {
     })
   },[])
 
+  useEffect(() =>{
+    fetchData();
+  },[])
+
+
+  const fetchData = () => {
+    axios
+      .get("https://eapi.vizitonline.com/manager/employees/attendance/list/")
+      .then((res) =>{
+        setData(res.data);
+        setLoading(false);
+      })
+      .catch((err) =>{
+        console.error("Error receiving data from the server.",err);
+        setError("Error receiving data from the server.")
+        setLoading(false);
+
+      })
+  }
+
+
+  const handleUpdate = async (id) => {
+    try {
+      const newNote = prompt("Enter a new note:");
+      if (!newNote) return;
+
+      await axios.patch(
+        `https://eapi.vizitonline.com/manager/employees/attendance/update/${id}/`,
+        {
+          notes: newNote,      
+          is_manual: true       
+        }
+      );
+
+      alert("Record updated successfully.✅");
+
+      fetchData();
+
+    } catch (err) {
+      console.error("Error updating:", err);
+      alert("Problem updating record ❌");
+    }
+  };
+
+  if (loading) return <p>is Loading..</p>;
+  if (error) return <p>{error}</p>;
+
+
  return (
     <div className="container">
       <header className="header">
@@ -40,6 +88,7 @@ function App() {
               <th>نوع عملیات</th>
               <th>زمان</th>
               <th>وضعیت</th>
+              <th>یادداشت</th>
             </tr>
           </thead>
           <tbody>
@@ -51,6 +100,7 @@ function App() {
               {/* <td>{item.action_type_displaye}</td> */}
               <td>{new Date(item.timestamp).toLocaleString("fa-IR")}</td>
               <td>{item.is_manual_display}</td>
+              <td><button onClick={() => handleUpdate(item.id)}>ویرایش</button></td>
             </tr>))}
             
           </tbody>
