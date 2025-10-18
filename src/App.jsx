@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import './styles.css'
 import axios from 'axios'
-import { useEffect,use } from 'react'
+import { useEffect } from 'react'
 
 function App() {
 
