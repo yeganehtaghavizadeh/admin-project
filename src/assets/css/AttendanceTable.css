@@ -1,0 +1,22 @@
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #334155;
+}
+
+.attendance-table thead {
+  background-color: #334155;
+  color: #f8fafc;
+}
+
+.attendance-table tbody tr:hover {
+  background-color: #243045;
+  transition: 0.2s ease;
+}

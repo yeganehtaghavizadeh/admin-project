@@ -1,113 +1,12 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import './styles.css'
-import axios from 'axios'
-import { useEffect } from 'react'
+import Dashboard from "./pages/Dashboard";
+import "./assets/css/style.css";
 
 function App() {
-
-  const [data,setData] = useState([])
-  const [loading,setLoading] = useState(true);
-  const [error,setError] = useState(null)
-
-  useEffect(() =>{
-    axios.get("https://eapi.vizitonline.com/manager/employees/attendance/list/").then((Response)=>{
-      setData(Response.data);
-      setLoading(false);
-    })
-    .catch((err) => {
-      setError("Error receiving data from the server.");
-      setLoading(false)
-    })
-  },[])
-
-  useEffect(() =>{
-    fetchData();
-  },[])
-
-
-  const fetchData = () => {
-    axios
-      .get("https://eapi.vizitonline.com/manager/employees/attendance/list/")
-      .then((res) =>{
-        setData(res.data);
-        setLoading(false);
-      })
-      .catch((err) =>{
-        console.error("Error receiving data from the server.",err);
-        setError("Error receiving data from the server.")
-        setLoading(false);
-
-      })
-  }
-
-
-  const handleUpdate = async (id) => {
-    try {
-      const newNote = prompt("Enter a new note:");
-      if (!newNote) return;
-
-      await axios.patch(
-        `https://eapi.vizitonline.com/manager/employees/attendance/update/${id}/`,
-        {
-          notes: newNote,      
-          is_manual: true       
-        }
-      );
-
-      alert("Record updated successfully.✅");
-
-      fetchData();
-
-    } catch (err) {
-      console.error("Error updating:", err);
-      alert("Problem updating record ❌");
-    }
-  };
-
-  if (loading) return <p>is Loading..</p>;
-  if (error) return <p>{error}</p>;
-
-
- return (
-    <div className="container">
-      <header className="header">
-        <h1>پنل مدیریت</h1>
-        <button className="add-btn">افزودن کارمند +</button>
-      </header>
-
-      <section className="card">
-        <h2>تاریخچه ورود و خروج کاربران</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>شناسه</th>
-              <th>نام کامل</th>
-              <th>نوع عملیات</th>
-              <th>زمان</th>
-              <th>وضعیت</th>
-              <th>یادداشت</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((item) =>(
-              <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.employee_fullname}</td>
-              <td>{item.action_type_display}</td>
-              {/* <td>{item.action_type_displaye}</td> */}
-              <td>{new Date(item.timestamp).toLocaleString("fa-IR")}</td>
-              <td>{item.is_manual_display}</td>
-              <td><button onClick={() => handleUpdate(item.id)}>ویرایش</button></td>
-            </tr>))}
-            
-          </tbody>
-        </table>
-      </section>
+  return (
+    <div className="App">
+      <Dashboard />
     </div>
   );
 }
 
-export default App
+export default App;
